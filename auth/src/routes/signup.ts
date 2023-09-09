@@ -33,10 +33,6 @@ router.post(
     const user = User.build({ email, password });
     await user.save();
 
-    if (!process.env.JWT_KEY) {
-      throw new Error("JWT_KEY must be defined");
-    }
-
     // generate jwt
     const userJwt = jwt.sign(
       {
