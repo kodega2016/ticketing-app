@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { Password } from "../services/password";
 
@@ -19,6 +20,7 @@ interface UserModel extends mongoose.Model<any> {
 interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
+  generateAuthToken(): string;
 }
 
 const userSchema = new mongoose.Schema(
@@ -31,6 +33,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minLength: 6,
+      select: false,
     },
   },
   {
@@ -56,6 +59,16 @@ userSchema.pre("save", async function (done) {
   }
   done();
 });
+
+userSchema.methods.generateAuthToken = function (): string {
+  return jwt.sign(
+    {
+      id: this.id,
+      email: this.email,
+    },
+    process.env.JWT_KEY!
+  );
+};
 
 const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
 
