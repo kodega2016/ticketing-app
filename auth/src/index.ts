@@ -1,10 +1,24 @@
+import cookieSession from "cookie-session";
 import express, { Application } from "express";
 import "express-async-errors";
 import mongoose from "mongoose";
+
 const app: Application = express();
+
+// set trust proxy to true for https
+app.set("trust proxy", true);
 // setup express body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// setup cookie session
+app.use(
+  cookieSession({
+    // this needs to be true for https
+    secure: true,
+    signed: false,
+  })
+);
 
 // setup routes
 import { NotFoundError } from "./errors/not-found-error";
