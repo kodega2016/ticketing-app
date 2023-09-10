@@ -30,6 +30,11 @@ router.post(
 
     const userJwt = existingUser.generateAuthToken();
 
+    // set cookie session
+    req.session = {
+      jwt: userJwt,
+    };
+
     res.status(200).json({
       data: {
         ...existingUser.toJSON(),
