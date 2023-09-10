@@ -15,3 +15,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: kodega2016/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
