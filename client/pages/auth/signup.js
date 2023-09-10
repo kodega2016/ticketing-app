@@ -1,3 +1,4 @@
+import Router from "next/router";
 import { useState } from "react";
 import useRequest from "../../hooks/use-request";
 
@@ -10,6 +11,10 @@ const Signup = () => {
     body: {
       email,
       password,
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Router.push("/");
     },
   });
 
