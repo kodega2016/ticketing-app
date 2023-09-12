@@ -1,20 +1,33 @@
 import axios from "axios";
 
-const Landing = ({ currentUser }) => {
+const LandingPage = ({ currentUser }) => {
   console.log(currentUser);
-  console.log("I was executed on the client");
+  // axios.get('/api/users/currentuser');
+
   return <h1>Landing Page</h1>;
 };
 
-Landing.getInitialProps = async () => {
+LandingPage.getInitialProps = async ({ req }) => {
   if (typeof window === "undefined") {
-    console.log("I was executed on the server");
+    // we are on the server!
+    // requests should be made to http://ingress-nginx.ingress-nginx...laksdjfk
+    const {
+      data: { data },
+    } = await axios.get(
+      "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser",
+      {
+        headers: req.headers,
+      }
+    );
+
+    return data;
   } else {
-    console.log("I was executed on the client");
+    // we are on the browser!
+    // requests can be made with a base url of ''
     const { data } = await axios.get("/api/users/currentuser");
+
     return data;
   }
-  return {};
 };
 
-export default Landing;
+export default LandingPage;
