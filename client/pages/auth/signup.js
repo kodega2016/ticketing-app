@@ -29,6 +29,7 @@ const Signup = () => {
       <div className="form-group">
         <label>Email Address</label>
         <input
+          placeholder="Enter your email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type="email"
@@ -38,14 +39,17 @@ const Signup = () => {
       <div className="form-group">
         <label>Password</label>
         <input
+          placeholder="Enter your password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
           className="form-control"
         />
       </div>
-      {errors}
-      <button className="btn btn-primary">Sign Up</button>
+      <div className="mt-2">
+        {errors}
+        <button className="btn btn-primary">Sign Up</button>
+      </div>
     </form>
   );
 };
