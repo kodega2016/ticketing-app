@@ -20,8 +20,7 @@ app.use(
 );
 
 // setup routes
-import { NotFoundError } from "./errors/not-found-error";
-import { errorHandler } from "./middlewares/error-handler";
+import { NotFoundError,errorHandler } from "@kodetickets/common";
 import { currentUserRouter } from "./routes/current-user";
 import { signinRouter } from "./routes/signin";
 import { signoutRouter } from "./routes/signout";

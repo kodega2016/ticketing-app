@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Maven+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bitter&display=swap');
 
 /* Path: client/assets/styles.css */
 body {
-  font-family: 'Maven Pro', sans-serif;
+  font-family: 'Bitter', serif;
   font-size: 1rem;
   line-height: 1.5;
   color: #333;
-  background-color: #fff;
+  background-color: #F0F0F0;
 }
