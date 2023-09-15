@@ -17,12 +17,16 @@ app.use(
   })
 );
 
-import { NotFoundError,errorHandler } from "@kodetickets/common";
+import { NotFoundError,errorHandler,currentUser } from "@kodetickets/common";
+import { createTicketRouter } from './routes/__test__/new';
 
 // setup routes
+app.use(currentUser)
+app.use(createTicketRouter)
 
 // setup error handler
 app.get("*", async (req, res) => {
+  console.log('req.currentUser', req.currentUser);
   throw new NotFoundError();
 });
 app.use(errorHandler);
