@@ -1,7 +1,7 @@
 import { requireAuth, validateRequest } from "@kodetickets/common";
 import express, { Request, Response, Router } from "express";
 import { body } from "express-validator";
-import { Ticket } from "../../models/ticket";
+import { Ticket } from "../models/ticket";
 const router: Router = express.Router();
 
 router.post(

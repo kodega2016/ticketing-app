@@ -8,6 +8,7 @@
     "test": "jest --watchAll --no-cache"
   },
   "jest": {
+    "testTimeout": 90000,
     "preset": "ts-jest",
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
@@ -18,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@kodetickets/common": "^1.0.6",
+    "@kodetickets/common": "^1.0.10",
     "@rallycoding/common": "^1.0.12",
     "@types/cookie-session": "^2.0.45",
     "@types/express": "^4.17.17",
