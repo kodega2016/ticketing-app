@@ -1,5 +1,5 @@
-import express, { Application } from "express";
 import cookieSession from "cookie-session";
+import express, { Application } from "express";
 import "express-async-errors";
 const app: Application = express();
 // set trust proxy to true for https
@@ -18,7 +18,8 @@ app.use(
   })
 );
 
-import { NotFoundError, errorHandler, currentUser } from "@kodetickets/common";
+import { NotFoundError, currentUser, errorHandler } from "@kodetickets/common";
+import { indexTicketRouter } from "./routes";
 import { createTicketRouter } from "./routes/new";
 import { showTicketRouter } from "./routes/show";
 
@@ -26,9 +27,10 @@ import { showTicketRouter } from "./routes/show";
 app.use(currentUser);
 app.use(createTicketRouter);
 app.use(showTicketRouter);
+app.use(indexTicketRouter);
 // setup error handler
-// app.get("*", async (req, res) => {
-//   throw new NotFoundError();
-// });
+app.get("*", async (req, res) => {
+  throw new NotFoundError();
+});
 app.use(errorHandler);
 export { app };
