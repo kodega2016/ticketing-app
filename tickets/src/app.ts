@@ -22,12 +22,14 @@ import { NotFoundError, currentUser, errorHandler } from "@kodetickets/common";
 import { indexTicketRouter } from "./routes";
 import { createTicketRouter } from "./routes/new";
 import { showTicketRouter } from "./routes/show";
+import { updateTicketRouter } from "./routes/update";
 
 // setup routes
 app.use(currentUser);
 app.use(createTicketRouter);
 app.use(showTicketRouter);
 app.use(indexTicketRouter);
+app.use(updateTicketRouter);
 // setup error handler
 app.get("*", async (req, res) => {
   throw new NotFoundError();
