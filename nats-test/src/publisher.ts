@@ -1,5 +1,6 @@
 import { randomBytes } from "crypto";
 import nats from "node-nats-streaming";
+import { TicketCreatedPublisher } from "./events/ticket-created-publisher";
 console.clear();
 
 const clientId = randomBytes(4).toString("hex");
@@ -16,8 +17,5 @@ stan.on("connect", () => {
     price: 20,
   };
 
-  const dataString = JSON.stringify(data);
-  stan.publish("ticket:created", dataString, () => {
-    console.log("Event published");
-  });
+  new TicketCreatedPublisher(stan).publish(data);
 });
