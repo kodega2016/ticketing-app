@@ -1,7 +1,6 @@
+import { Listener, Subjects, TicketCreatedEvent } from "@kodetickets/common";
 import { Message } from "node-nats-streaming";
-import { Listener } from "./base-listener";
-import { Subjects } from "./subjects";
-import { TicketCreatedEvent } from "./ticket-created-event";
+
 
 export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
   readonly subject = Subjects.TicketCreated;
