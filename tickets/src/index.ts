@@ -14,7 +14,16 @@ const start = async () => {
   }
 
   try {
+    // setup nats connection and handle close events
     await natsWrapper.connect("ticketing","random", "http://nats-cluster-ip-service:4222");
+    natsWrapper.client.on("close",()=>{
+      console.log("NATS connection closed!");
+      process.exit();
+    });
+
+    process.on("SIGINT",()=>natsWrapper.client.close());
+    process.on("SIGTERM",()=>natsWrapper.client.close());
+    // setup mongoose connection
     await mongoose.connect(process.env.MONGO_URI!, {});
     console.log("[🗄] Connected to MongoDB");
   } catch (e) {
@@ -35,5 +44,4 @@ const start = async () => {
     });
   });
 };
-
 start();
