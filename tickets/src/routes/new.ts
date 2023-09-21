@@ -18,6 +18,12 @@ router.post(
     const { title, price } = req.body;
     const ticket = Ticket.build({ title, price, userId: req.currentUser!.id });
     await ticket.save();
+    // new TicketCreatedPublisher(client).publish({
+    //   id: ticket.id,
+    //   title: ticket.title,
+    //   price: ticket.price,
+    //   userId: ticket.userId,
+    // });
 
     res.status(201).send({
       data: ticket,
