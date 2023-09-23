@@ -1,16 +1,15 @@
-import { BadRequestError } from "@kodetickets/common";
-import "express-async-errors";
+import { BadRequestError } from "@kodetickets/common/build/errors/bad-request-error";
 import mongoose from "mongoose";
 import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
 
 const start = async () => {
-  if (!process.env.JWT_KEY) {
-    throw new BadRequestError("JWT_KEY must be defined");
-  }
-
   if (!process.env.MONGO_URI) {
     throw new BadRequestError("MONGO_URI must be defined");
+  }
+
+  if (!process.env.JWT_KEY) {
+    throw new BadRequestError("JWT_KEY must be defined");
   }
 
   if (!process.env.NATS_CLIENT_ID) {
@@ -32,6 +31,7 @@ const start = async () => {
       process.env.NATS_CLIENT_ID,
       process.env.NATS_URL
     );
+
     natsWrapper.client.on("close", () => {
       console.log("NATS connection closed!");
       process.exit();
@@ -39,13 +39,15 @@ const start = async () => {
 
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
-    // setup mongoose connection
-    await mongoose.connect(process.env.MONGO_URI!, {});
-    console.log("[🗄] Connected to MongoDB");
+    console.log("[🔌] Connected to NATS");
   } catch (e) {
-    console.error(e);
+    console.log(e);
     process.exit(1);
   }
+
+  // setup mongodb connection
+  await mongoose.connect(process.env.MONGO_URI);
+  console.log("[🗄] Connected to MongoDB");
 
   const PORT = 3000;
   const server = app.listen(PORT, () => {
@@ -60,4 +62,5 @@ const start = async () => {
     });
   });
 };
+
 start();
