@@ -9,20 +9,36 @@ const start = async () => {
     throw new BadRequestError("JWT_KEY must be defined");
   }
 
-  if(!process.env.MONGO_URI){
+  if (!process.env.MONGO_URI) {
     throw new BadRequestError("MONGO_URI must be defined");
+  }
+
+  if (!process.env.NATS_CLIENT_ID) {
+    throw new BadRequestError("NATS_CLIENT_ID must be defined");
+  }
+
+  if (!process.env.NATS_URL) {
+    throw new BadRequestError("NATS_URL must be defined");
+  }
+
+  if (!process.env.NATS_CLUSTER_ID) {
+    throw new BadRequestError("NATS_CLUSTER_ID must be defined");
   }
 
   try {
     // setup nats connection and handle close events
-    await natsWrapper.connect("ticketing","random", "http://nats-cluster-ip-service:4222");
-    natsWrapper.client.on("close",()=>{
+    await natsWrapper.connect(
+      process.env.NATS_CLUSTER_ID!,
+      process.env.NATS_CLIENT_ID,
+      process.env.NATS_URL
+    );
+    natsWrapper.client.on("close", () => {
       console.log("NATS connection closed!");
       process.exit();
     });
 
-    process.on("SIGINT",()=>natsWrapper.client.close());
-    process.on("SIGTERM",()=>natsWrapper.client.close());
+    process.on("SIGINT", () => natsWrapper.client.close());
+    process.on("SIGTERM", () => natsWrapper.client.close());
     // setup mongoose connection
     await mongoose.connect(process.env.MONGO_URI!, {});
     console.log("[🗄] Connected to MongoDB");
