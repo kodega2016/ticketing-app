@@ -2,12 +2,13 @@ import jwt from "jsonwebtoken";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 
+let mongo: any;
 jest.mock("../nats-wrapper");
 
-let mongo: any;
 beforeAll(async () => {
   // clear all mocks
   jest.clearAllMocks();
+
   // set env variables
   process.env.JWT_KEY = "secret";
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
