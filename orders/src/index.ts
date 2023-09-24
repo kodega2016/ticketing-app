@@ -1,6 +1,7 @@
 import { BadRequestError } from "@kodetickets/common/build/errors/bad-request-error";
 import mongoose from "mongoose";
 import { app } from "./app";
+import { TicketCreatedListener } from "./events/listener/ticket-created-listener";
 import { natsWrapper } from "./nats-wrapper";
 
 const start = async () => {
@@ -40,6 +41,8 @@ const start = async () => {
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
     console.log("[🔌] Connected to NATS");
+
+    new TicketCreatedListener(natsWrapper.client).listen();
   } catch (e) {
     console.log(e);
     process.exit(1);
