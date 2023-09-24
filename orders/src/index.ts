@@ -2,6 +2,7 @@ import { BadRequestError } from "@kodetickets/common/build/errors/bad-request-er
 import mongoose from "mongoose";
 import { app } from "./app";
 import { TicketCreatedListener } from "./events/listener/ticket-created-listener";
+import { TicketUpdatedListener } from "./events/listener/ticket-updated-listener";
 import { natsWrapper } from "./nats-wrapper";
 
 const start = async () => {
@@ -43,6 +44,7 @@ const start = async () => {
     console.log("[🔌] Connected to NATS");
 
     new TicketCreatedListener(natsWrapper.client).listen();
+    new TicketUpdatedListener(natsWrapper.client).listen();
   } catch (e) {
     console.log(e);
     process.exit(1);
