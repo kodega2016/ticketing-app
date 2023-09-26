@@ -9,7 +9,7 @@ const setup = async () => {
   // create an instance of the listener
   const listener = new OrderCreatedListener(natsWrapper.client);
   // create a ticket
-  const ticket = await Ticket.build({
+  const ticket = Ticket.build({
     title: "concert",
     price: 99,
     userId: "asdf",
@@ -24,7 +24,7 @@ const setup = async () => {
     version: 0,
     ticket: {
       id: ticket.id,
-      price: 0,
+      price: ticket.price,
     },
   };
   // create a fake message object
@@ -33,15 +33,15 @@ const setup = async () => {
     ack: jest.fn(),
   };
   // return all of this stuff
-  return { listener, data, msg };
+  return { listener, ticket, data, msg };
 };
 
 it("sets the orderId of the ticket", async () => {
-  const { listener, data, msg } = await setup();
+  const { listener, data, ticket, msg } = await setup();
   // call the onMessage function with the data object + message object
   await listener.onMessage(data, msg);
   // write assertions to make sure a ticket was created!
-  const updatedTicket = await Ticket.findById(data.ticket.id);
+  const updatedTicket = await Ticket.findById(ticket.id);
   expect(updatedTicket!.orderId).toEqual(data.id);
 });
 
@@ -51,4 +51,12 @@ it("acks the message", async () => {
   await listener.onMessage(data, msg);
   // write assertions to make sure ack function is called
   expect(msg.ack).toHaveBeenCalled();
+});
+
+it("publishes a ticket updated event", async () => {
+  const { listener, ticket, data, msg } = await setup();
+  // call the onMessage function with the data object + message object
+  await listener.onMessage(data, msg);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

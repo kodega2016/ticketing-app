@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@kodetickets/common": "^1.0.18",
+    "@kodetickets/common": "^1.0.19",
     "@types/cookie-session": "^2.0.45",
     "@types/express": "^4.17.17",
     "@types/express-validator": "^3.0.0",

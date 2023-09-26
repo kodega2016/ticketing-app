@@ -1,7 +1,6 @@
 import { Listener, OrderCreatedEvent, Subjects } from "@kodetickets/common";
 import { Message } from "node-nats-streaming";
 import { Ticket } from "../../models/ticket";
-import { natsWrapper } from "../../nats-wrapper";
 import { TicketUpdatedPublisher } from "../publishers/ticket-updated-publisher";
 import { queueGroupName } from "./queue-group-name";
 
@@ -13,23 +12,25 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     msg: Message
   ): Promise<void> {
     // find the ticket that the order is reserving
-    const { id, ticket } = data;
-    const fetchedTicket = await Ticket.findById(ticket.id);
+    const ticket = await Ticket.findById(data.ticket.id);
+
     // if no ticket, throw error
-    if (!fetchedTicket) {
+    if (!ticket) {
       throw new Error("Ticket not found");
     }
     // mark the ticket as being reserved by setting its orderId property
-    fetchedTicket.set({ orderId: id });
-    await fetchedTicket.save();
+    ticket.set({ orderId: data.id });
+    await ticket.save();
+    console.log("ticket", ticket);
 
     // publish ticket updated event
-    await new TicketUpdatedPublisher(natsWrapper.client).publish({
-      id: fetchedTicket.id,
-      version: fetchedTicket.version,
-      title: fetchedTicket.title,
-      price: fetchedTicket.price,
-      userId: fetchedTicket.userId,
+    await new TicketUpdatedPublisher(this.client).publish({
+      id: ticket.id,
+      version: ticket.version,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+      orderId: ticket.orderId,
     });
 
     // ack the message
