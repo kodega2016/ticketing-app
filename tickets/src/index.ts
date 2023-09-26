@@ -2,6 +2,7 @@ import { BadRequestError } from "@kodetickets/common";
 import "express-async-errors";
 import mongoose from "mongoose";
 import { app } from "./app";
+import { OrderCancelledListener } from "./events/listener/order-cancelled-listener";
 import { OrderCreatedListener } from "./events/listener/order-created-listener";
 import { natsWrapper } from "./nats-wrapper";
 
@@ -43,6 +44,7 @@ const start = async () => {
     console.log("[🔌] Connected to NATS");
 
     new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
 
     // setup mongoose connection
     await mongoose.connect(process.env.MONGO_URI!, {});
