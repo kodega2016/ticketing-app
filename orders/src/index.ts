@@ -1,6 +1,8 @@
 import { BadRequestError } from "@kodetickets/common/build/errors/bad-request-error";
 import mongoose from "mongoose";
 import { app } from "./app";
+import { ExpirationCompleteListener } from "./events/listener/expiration-complete-listener";
+import { OrderCancelledListener } from "./events/listener/order-cancelled-listener";
 import { TicketCreatedListener } from "./events/listener/ticket-created-listener";
 import { TicketUpdatedListener } from "./events/listener/ticket-updated-listener";
 import { natsWrapper } from "./nats-wrapper";
@@ -45,6 +47,8 @@ const start = async () => {
 
     new TicketCreatedListener(natsWrapper.client).listen();
     new TicketUpdatedListener(natsWrapper.client).listen();
+    new ExpirationCompleteListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
   } catch (e) {
     console.log(e);
     process.exit(1);
