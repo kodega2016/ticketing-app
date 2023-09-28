@@ -1,5 +1,6 @@
 import { OrderStatus } from "@kodetickets/common";
 import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface OrderAttrs {
   id: string;
@@ -49,5 +50,8 @@ orderSchema.statics.build = (attrs: OrderAttrs) => {
     status: attrs.status,
   });
 };
+
+orderSchema.set("versionKey", "version");
+orderSchema.plugin(updateIfCurrentPlugin);
 
 const Order = mongoose.model<OrderDoc, OrderModel>("Order", orderSchema);
