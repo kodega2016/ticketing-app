@@ -47,3 +47,12 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+
+    - image: kodega2016/payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
