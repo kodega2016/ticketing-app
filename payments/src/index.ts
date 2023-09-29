@@ -25,6 +25,10 @@ const start = async () => {
     throw new Error("NATS_CLUSTER_ID must be defined");
   }
 
+  if (!process.env.STRIPE_KEY) {
+    throw new Error("STRIPE_KEY must be defined");
+  }
+
   try {
     // setup nats connection and handle close events
     await natsWrapper.connect(
