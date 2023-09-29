@@ -33,13 +33,6 @@ router.post(
       throw new BadRequestError("Cannot pay for an cancelled order");
     }
 
-    console.log({
-      currency: "usd",
-      amount: order.price * 100,
-      source: token,
-      description: "Ticketing app",
-    });
-
     await stripe.charges.create({
       currency: "usd",
       amount: order.price * 100,
