@@ -1,6 +1,13 @@
-import { requireAuth, validateRequest } from "@kodetickets/common";
+import {
+  NotAuthorizedError,
+  OrderStatus,
+  requireAuth,
+  validateRequest,
+  BadRequestError,
+} from "@kodetickets/common";
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
+import { Order } from "../models/order";
 const router = express.Router();
 
 router.post(
@@ -11,8 +18,20 @@ router.post(
     body("orderId").not().isEmpty().withMessage("orderId is required"),
   ],
   validateRequest,
-  (req: Request, res: Response) => {
-    console.info("payment is created");
+  async (req: Request, res: Response) => {
+    const { token, orderId } = req.body;
+    const order = await Order.findById(orderId);
+    if (!order) {
+      throw new Error("Order not found");
+    }
+    if (order.userId !== req.currentUser!.id) {
+      throw new NotAuthorizedError();
+    }
+
+    if (order.status === OrderStatus.Cancelled) {
+      throw new BadRequestError("Cannot pay for an cancelled order");
+    }
+
     res.status(201).send({
       data: [],
       message: "payment is created successfully",
