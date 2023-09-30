@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useRequest from "../../hooks/use-request";
 
 const OrderShow = ({ order: { data } }) => {
-  const [timeLeft, setTimeLeft] = useState("");
+  const [timeLeft, setTimeLeft] = useState(0);
 
   const { doRequest, errors } = useRequest({
     url: "/api/payments",
@@ -23,7 +23,11 @@ const OrderShow = ({ order: { data } }) => {
     return () => {
       clearInterval(timerId);
     };
-  }, []);
+  }, [data]);
+
+  if (timeLeft < 0) {
+    return <div>Order Expired</div>;
+  }
 
   return (
     <div>
