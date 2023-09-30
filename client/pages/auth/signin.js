@@ -24,38 +24,34 @@ const SignIn = () => {
   };
 
   return (
-    <div className="card">
-      <div className="card-body">
-        <form onSubmit={onSubmit}>
-          <h1>Sign In</h1>
-          <div className="form-group">
-            <label>Email Address</label>
-            <input
-              placeholder="Enter your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
-              className="form-control"
-            />
-          </div>
-
-          <div className="mt-2">
-            {errors}
-            <button className="btn btn-primary">Sign in</button>
-          </div>
-        </form>
+    <form onSubmit={onSubmit}>
+      <h1>Sign In</h1>
+      <div className="form-group">
+        <label>Email Address</label>
+        <input
+          placeholder="Enter your email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="email"
+          className="form-control"
+        />
       </div>
-    </div>
+      <div className="form-group">
+        <label>Password</label>
+        <input
+          placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+          className="form-control"
+        />
+      </div>
+
+      <div className="mt-2">
+        {errors}
+        <button className="btn btn-primary">Sign in</button>
+      </div>
+    </form>
   );
 };
 export default SignIn;
