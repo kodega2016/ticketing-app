@@ -19,7 +19,7 @@ export default ({ currentUser }) => {
     <nav className="navbar navbar-light bg-light">
       <div className="container">
         <Link href="/" className="navbar-brand">
-          GitTix
+          Git Tix
         </Link>
         <div className="d-flex justify-content-end">
           <ul className="nav d-flex align-items-center">{links}</ul>
