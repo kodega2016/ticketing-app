@@ -9,7 +9,5 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Install dependencies
-        run: cd auth && npm install
-      - name: Run unit tests
-        run: npm run test
+      - name: install dependencies
+        run: cd auth && npm install && npm run test -e CI=true
