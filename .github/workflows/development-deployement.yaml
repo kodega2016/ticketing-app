@@ -10,4 +10,4 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: install dependencies
-        run: cd auth && npm install && npm run test -e CI=true
+        run: cd auth && npm install && npm run test:ci
