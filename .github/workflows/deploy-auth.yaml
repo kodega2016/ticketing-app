@@ -1,6 +1,8 @@
 name: auth-deployment
 on:
     pull_request: 
+        paths:
+            - 'auth/**'
         branches: 
             - main
 jobs:
