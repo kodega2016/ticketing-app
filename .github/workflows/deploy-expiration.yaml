@@ -1,0 +1,22 @@
+name: deployment-expiration
+on:
+  pull_request:
+    paths:
+      - "expiration/**"
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout the code
+        uses: actions/checkout@v2
+      - name: build image
+        run: cd expiration && docker build -t kodega2016/expiration .
+      - name: login to docker
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: push image to docker hub
+        run: docker push kodega2016/expiration
